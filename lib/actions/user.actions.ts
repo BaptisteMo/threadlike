@@ -52,3 +52,19 @@ export async function updateUser({
     throw new Error (`Echec d'update ou de création du profil: ${error.message}`);
   } 
 }
+
+export async function fetchUser(userId : string){
+
+        try{
+            connectToDB();
+
+            return await User.findOne({id: userId})
+            //  .populate({
+            //     path:'communities',
+            //    model = Community
+            // })
+        } catch(error : any){
+            throw new Error (`Erreur pour récupérer les infos user : ${error.message} `)
+        }
+
+}
