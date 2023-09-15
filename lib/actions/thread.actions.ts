@@ -5,6 +5,8 @@ import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { revalidatePath } from "next/cache";
 import { skip } from "node:test";
+import { StringifyOptions } from "querystring";
+import { twJoin } from "tailwind-merge";
 
 interface Params {
 
@@ -44,7 +46,7 @@ export async function fetchPosts(pageNumber= 1, pageSize : 20) {
     const skipAmount = (pageNumber - 1) * pageSize
 
     // Récupérer uniquement les threads de top level, pas les commentaires
-    const postsQuery = Thread.find({ parenId : {$in: [null, undefined]}})
+    const postsQuery = Thread.find({ parentId : {$in: [null, undefined]}})
         .sort({ createdAt : 'desc'})
         .skip (skipAmount)
         .limit (pageSize)
@@ -104,4 +106,41 @@ export async function fetchThreadById(id:string) {
     }catch (error : any){
         throw new Error (`Erreur lors de la récupération du Thread : ${error.message}`)
     }
+}
+
+export async function addCommentToThread(
+    threadId:string,
+    commentText : string,
+    userId : string,
+    path : string,
+    
+    ) {
+
+        connectToDB();
+
+        try{
+            // Retrouver le thread d'origine avec un son ID
+            const originalThread = await Thread.findById(threadId);
+            if(!originalThread){
+                throw new Error('Thread non trouvé')
+            }
+            // Créer un nouveau thread avec un text à l'intérieur
+            const commentThread = new Thread({
+                text : commentText,
+                author : userId, // author et parentId sont les props récupérer de la page.tsx
+                parentId : threadId,
+            })
+            // On sauvegarde le nouveau thread 
+            const savedCommentThread = await commentThread.save();
+            // On update le thread parent
+            originalThread.children.push(savedCommentThread._id);
+            //On sauvegarde le push
+            await originalThread.save();
+            //On revalide le path
+            revalidatePath(path);
+
+        }catch(error : any){
+            throw new Error (`Error d'ajout du commentaire au thread : ${error.message}`)
+        }
+    
 }
