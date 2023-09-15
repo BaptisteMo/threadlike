@@ -46,7 +46,7 @@ const ThreadCard = (
             <div className="flex w-full flex-1 flex-row gap-4">
                 <div className="flex flex-col items-center">
                     <Link 
-                      href={`/profil//${author.id}`} 
+                      href={`/profile//${author.id}`} 
                       className='relative h-11 w-11'>
                         <Image 
                             src={author.image}
@@ -60,14 +60,14 @@ const ThreadCard = (
                 </div>
                 <div className="flew w-full flex-col">
                      <Link 
-                     href={`/profil//${author.id}`} 
+                     href={`/profile//${author.id}`} 
                      className='w-fit'>
                         <h4 className="cursor-pointer text-base-semibold text-light-1">
                             {author.name}
                         </h4>
                     </Link>
                     <p className="mt-2 text-small-regular text-light-2">{content}</p>
-                    <div className="flex mt-5 gap-3">
+                    <div className={`${isComment && 'mb-10'} flex mt-5 gap-3`}>
                         <div className='flex gap-3.5'>
                             <Image 
                                 src="/assets/heart-gray.svg"
@@ -102,7 +102,7 @@ const ThreadCard = (
                             
                         </div>
                     {isComment && comments.length > 0 &&(
-                        <Link href={`/profil//${author.id}`} >
+                        <Link href={`/profile//${author.id}`} >
                             <p className='mt-1 text-subtle-medium text-gray-1'>{comments.length} replies</p>
                         </Link>
                     )}
