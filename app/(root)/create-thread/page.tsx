@@ -1,7 +1,7 @@
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { fetchUser } from "@/lib/actions/user.actions";
-import { UserValidation } from "@/lib/validations/user";
+
 import PostThread from "@/components/forms/PostThread";
 
 async function Page (){
