@@ -3,9 +3,6 @@
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { fetchUser, fetchUsers } from "@/lib/actions/user.actions";
-import { profileTabs } from "@/constants";
-import Image from "next/image";
-import ThreadsTabs from "@/components/shared/ThreadsTabs";
 import UserCard from "@/components/cards/UserCard";
 
 
